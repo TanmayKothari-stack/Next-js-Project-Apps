@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { FaEdit, FaMoon, FaSun, FaTrash } from 'react-icons/fa';
-import { addItem, getItems, deleteItem, updateItem } from './utils/db';
+import { addItem, getItems, deleteItem, updateItem } from '@/src/app/utils/db';
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useTheme } from "next-themes";
