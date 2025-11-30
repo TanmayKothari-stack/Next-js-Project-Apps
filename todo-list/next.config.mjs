@@ -2,6 +2,7 @@ import pwa from "next-pwa";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",
   reactStrictMode: true,
   devIndicators: false,
   experimental: { appDir: true },
