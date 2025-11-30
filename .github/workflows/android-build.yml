@@ -11,48 +11,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'pnpm'
 
+      # 3️⃣ Setup PNPM (ensures pnpm is in PATH)
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
+      # 4️⃣ Install project dependencies
       - name: Install dependencies
         working-directory: todo-list
         run: pnpm install
 
+      # 5️⃣ Build Next.js app
       - name: Build Next.js app
         working-directory: todo-list
         run: pnpm build
 
+      # 6️⃣ Add Capacitor Android
       - name: Add Capacitor Android
         working-directory: todo-list
         run: |
           pnpm add @capacitor/android
           npx cap add android
 
+      # 7️⃣ Copy web assets to Android project
       - name: Copy web assets
         working-directory: todo-list
         run: npx cap copy
 
+      # 8️⃣ Setup Java 17 for Gradle build
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
+      # 9️⃣ Build Android APK
       - name: Build Android APK
         working-directory: todo-list/android
         run: ./gradlew assembleDebug
 
+      # 🔟 Upload APK artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
