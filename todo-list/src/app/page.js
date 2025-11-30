@@ -5,7 +5,7 @@ import { FaEdit, FaMoon, FaSun, FaTrash } from 'react-icons/fa';
 import { addItem, getItems, deleteItem, updateItem } from '@/src/app/utils/db';
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import { useTheme } from "next-themes";
+import { useTheme } from '@/src/app/Context/ThemeContext';
 
 function page() {
 
@@ -89,10 +89,10 @@ function page() {
 
   return (
     <>
-      <div className='border-0 flex flex-col items-center text-center p-2'>
-        <div className='border-0 border-red-500 w-full fixed top-0 z-10 bg-white dark:bg-black'>
-          <p className='text-xl font-bold pt-2 '>Todo List App</p>
-          <p className='absolute top-3 right-3' onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+      <div className="border-0 min-h-screen flex flex-col items-center text-center p-2 dark:bg-black">
+        <div className='border-0 border-red-500 w-full sm:w-[60%] md:w-[50%] xl:w-[40%] fixed top-0 z-10 bg-white dark:bg-[#201f1f] dark:text-white'>
+          <p className='text-xl font-bold pt-2'>Todo List App</p>
+          <p className='absolute top-3 right-3 cursor-pointer' onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
             {
               theme === "light" ?
                 <FaMoon size={18} />
@@ -100,7 +100,7 @@ function page() {
                 <FaSun size={18} />
             }
           </p>
-          <div className='border-0 w-full flex justify-around p-1 pr-2'>
+          <div className='border-0 flex justify-around p-1 pr-2'>
             <input
               type="text"
               className="w-full m-2 border border-blue-300 rounded-md p-2
@@ -113,12 +113,12 @@ function page() {
           </div>
         </div>
 
-        <span className='mt-[27%] sm:mt-[13%] md:mt-[10%] xl:mt-[7%] '></span>
+        <span className='mt-[27%] sm:mt-[13%] md:mt-[9%] xl:mt-[7%] '></span>
 
         {
           todos.length > 0 ?
             todos.map((todo, idx) => (
-              <div key={idx} className='border-0 w-full m-2 p-3 flex items-center justify-between rounded-md shadow-md'>
+              <div key={idx} className='border-0 w-full sm:w-[60%] md:w-[50%] xl:w-[40%] m-2 p-3 flex items-center justify-between rounded-md shadow-md bg-white dark:bg-[#272525] dark:text-white'>
                 <div className='border-0 w-full p-2 gap-5 flex items-center justify-between'>
                   <div className='border-0 text-sm text-gray-400 flex flex-col items-center gap-2 '>
                     <p>{todo.date}</p>
@@ -139,7 +139,7 @@ function page() {
             ))
             :
             (
-              <div className="flex fixed items-center justify-center h-screen">
+              <div className="flex fixed items-center justify-center w-full h-screen dark:bg-black dark:text-white ">
                 <p className="text-xl">No todos found</p>
               </div>
             )
