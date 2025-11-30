@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">todo-list</string>
-    <string name="title_activity_main">todo-list</string>
+    <string name="app_name">Todo List</string>
+    <string name="title_activity_main">Todo List</string>
     <string name="package_name">com.app.todolist</string>
     <string name="custom_url_scheme">com.app.todolist</string>
 </resources>
