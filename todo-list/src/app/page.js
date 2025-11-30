@@ -90,7 +90,7 @@ function page() {
   return (
     <>
       <div className="border-0 min-h-screen flex flex-col items-center text-center p-2 dark:bg-black">
-        <div className='border-0 border-red-500 w-full sm:w-[60%] md:w-[50%] xl:w-[40%] fixed top-0 z-10 bg-white dark:bg-[#201f1f] dark:text-white'>
+        <div className='border border-red-500 w-full sm:w-[60%] md:w-[50%] xl:w-[40%] fixed top-0 z-10 bg-white dark:bg-[#201f1f] dark:text-white'>
           <p className='text-xl font-bold pt-2'>Todo List App</p>
           <p className='absolute top-3 right-3 cursor-pointer' onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
             {
