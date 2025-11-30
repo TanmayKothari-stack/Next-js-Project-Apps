@@ -1,0 +1,92 @@
+
+  GNU nano 7.2                                  android-build.yml *                                          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+^G Help        ^O Write Out   ^W Where Is    ^K Cut         ^T Execute     ^C Location    M-U Undo
+^X Exit        ^R Read File   ^\ Replace     ^U Paste       ^J Justify     ^/ Go To Line  M-E Redoname: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 22
+
+    - name: Install dependencies
+      run: pnpm install
+      env:
+        CI: true
+
+    - name: Build Next.js static site
+      run: pnpm next build
+
+    - name: Add Capacitor Android
+      run: |
+        pnpm add @capacitor/android
+        npx cap add android
+      env:
+        CI: true
+
+    - name: Copy web assets to Android
+      run: npx cap copy
+
+    - name: Setup JDK 11
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Install Android SDK
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 33
+        target: google_apis
+        arch: x86_64
+        force-avd-creation: false
+        emulator-options: '-no-window -no-audio'
+
+    - name: Build APK
+      run: |
+        cd android
+        ./gradlew assembleDebug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: todo-list-apk
+        path: android/app/build/outputs/apk/debug/app-debug.apk
+
