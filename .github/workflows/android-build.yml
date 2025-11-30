@@ -9,6 +9,7 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: todo-list
@@ -53,7 +54,7 @@ jobs:
         cd android
         ./gradlew assembleDebug
 
-    - name: Upload APK artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: todo-list-apk
