@@ -140,7 +140,7 @@ function page() {
                 </div>
                 <p className='border-0 flex p-2 gap-2'>
                   <FaEdit size={18} className='cursor-pointer text-green-500' onClick={() => {
-                    setUpdateTodo(prev => ({ ...prev, id: todo.id })); setTodo_text.current.value = todo.name;
+                    setUpdateTodo(prev => ({ ...prev, id: todo.id })); setTodo_text.current.value = todo.name.trim();
                   }
                   } />
                   <FaTrash size={18} className='cursor-pointer text-red-500' onClick={() => deleteTodo(todo.id)} />
