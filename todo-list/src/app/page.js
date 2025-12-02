@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react'
-import { FaEdit, FaMoon, FaSun, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaMobile, FaMoon, FaSun, FaTrash } from 'react-icons/fa';
 import { addItem, getItems, deleteItem, updateItem } from '@/src/app/utils/db';
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
@@ -92,15 +92,11 @@ function page() {
       <div className="border-0 min-h-screen flex flex-col items-center text-center p-2 dark:bg-black">
         <div className='border-0 border-red-500 w-full sm:w-[60%] md:w-[50%] xl:w-[40%] fixed top-0 z-10 bg-white dark:bg-[#201f1f] dark:text-white'>
           <p className='text-xl font-bold pt-2'>Todo List App</p>
-          <p className='absolute top-3 right-3 cursor-pointer' onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-            {
-              theme === "light" ?
-                <FaMoon size={18} />
-                :
-                <FaSun size={18} />
-            }
-          </p>
-          <div className='border-0 flex justify-around p-1 pr-2'>
+          {/* <div className='border-0 absolute top-1.5 right-3'>
+            
+          </div> */}
+
+          <div className='border-0 flex justify-around p-1 pr-2 mt-1'>
             <input
               type="text"
               className="w-full m-2 border border-blue-300 rounded-md p-2
@@ -110,10 +106,15 @@ function page() {
             />
 
             <button className='bg-blue-300 text-white p-2 cursor-pointer shadow-md w-[100px] h-10 rounded-md mt-2' onClick={() => { updateTodo.id === null ? addTodo() : editTodo() }}>{updateTodo.id === null ? "Add" : "Update"}</button>
+            {
+              updateTodo.id !== null && (
+                <button className='bg-blue-300 text-white p-2 cursor-pointer shadow-md w-[100px] h-10 rounded-md mt-2 ml-2' onClick={() => { setUpdateTodo({ id: null, name: null }); setTodo_text.current.value = ""; }}>Cancel</button>
+              )
+            }
           </div>
         </div>
 
-        <span className='mt-[27%] sm:mt-[13%] md:mt-[9%] xl:mt-[7%] '></span>
+        <span className='mt-[30%] sm:mt-[18%] md:mt-[14%] xl:mt-[8%] '></span>
 
         {
           todos.length > 0 ?

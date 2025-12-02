@@ -4,23 +4,53 @@ import { createContext, useContext, useState, useEffect } from "react";
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("system"); // allow system as default
 
-  // Load saved theme from localStorage
+  // Determine real theme when theme = "system"
+  const getSystemTheme = () =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+
+   // Always reset theme to system on load
   useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    if (saved) setTheme(saved);
+    setTheme("system");            // Reset to system
+    localStorage.setItem("theme", "system"); // overwrite previous value
   }, []);
 
-  // Apply theme to <html> tag and save to storage
+  // Apply theme
   useEffect(() => {
+    if (!theme) return;
+
+    const actualTheme = theme === "system" ? getSystemTheme() : theme;
+
     document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(theme);
+    document.documentElement.classList.add(actualTheme);
+
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  // Auto-update when OS theme changes (optional)
+  useEffect(() => {
+    if (theme !== "system") return;
+
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = () => {
+      const actualTheme = getSystemTheme();
+      document.documentElement.classList.remove("light", "dark");
+      document.documentElement.classList.add(actualTheme);
+    };
+
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, [theme]);
+
   const toggleTheme = () => {
-    setTheme(prev => (prev === "light" ? "dark" : "light"));
+    setTheme(t =>
+      t === "light" ? "dark" :
+      t === "dark" ? "system" :
+      "light"
+    );
   };
 
   return (
@@ -30,6 +60,4 @@ export function ThemeProvider({ children }) {
   );
 }
 
-export function useTheme() {
-  return useContext(ThemeContext);
-}
+export const useTheme = () => useContext(ThemeContext);
