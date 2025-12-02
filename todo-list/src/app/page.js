@@ -33,6 +33,8 @@ function page() {
   const addTodo = async () => {
     if (todo.trim() != "") {
       addItem({ name: todo });
+      const audio = new Audio("/done.mp3");
+      audio.play();
       toast.success(`Todo added sucessfully ${todo.trim()} `);
       setTodo_text.current.value = "";
       setTodo("");
@@ -63,6 +65,11 @@ function page() {
 
     if (result.isConfirmed) {
       await deleteItem(id);
+      setTodo_text.current.value = "";
+      setTodo("");
+      setUpdateTodo({ id: null, name: null });
+      const audio = new Audio("/delete.mp3");
+      audio.play();
       toast.success("Todo deleted successfully");
     }
   }
@@ -70,6 +77,8 @@ function page() {
   const editTodo = async () => {
     if (updateTodo.name !== null && updateTodo.name.trim() != "") {
       updateTodo.name.trim() != "" && await updateItem({ id: updateTodo.id, name: updateTodo.name });
+      const audio = new Audio("/done.mp3");
+      audio.play();
       toast.success(`Todo updated sucessfully ${updateTodo.name.trim()} `);
       setUpdateTodo({ id: null, name: null });
       setTodo_text.current.value = "";
