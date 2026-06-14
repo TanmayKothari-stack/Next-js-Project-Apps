@@ -1,0 +1,24 @@
+{
+  "name": "socket-io-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.28.1",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "hashids": "^2.3.0",
+    "nodemon": "^3.1.14",
+    "pg": "^8.21.0",
+    "socket.io": "^4.8.3"
+  }
+}
