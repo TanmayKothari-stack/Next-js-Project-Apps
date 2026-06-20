@@ -18,6 +18,7 @@ import { Upload } from 'lucide-react';
 import { MapPin } from 'lucide-react';
 import axios from 'axios';
 import Image from 'next/image';
+import socket from '@/lib/socket';
 
 function Info({ params }) {
 
@@ -28,6 +29,29 @@ function Info({ params }) {
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLontitude] = useState(0);
     const [location, setLocation] = useState([]);
+    const [isOnline, setIsOnline] = useState("Offline");
+
+    // Check online status
+    useEffect(() => {
+        const checkOnline = () => {
+            socket.emit("check-user", receiver_id, (online) => {
+                online && setIsOnline("Online");
+            });
+        }
+
+        socket.on("user-online", checkOnline);
+        socket.on("user-offline", () => {
+            setIsOnline("Offline");
+        });
+
+        const interval = setInterval(checkOnline, 1000);
+
+        return () => {
+            socket.off("user-online", checkOnline);
+            socket.off("user-offline");
+            clearInterval(interval);
+        }
+    }, [isOnline]);
 
     useEffect(() => {
 
@@ -39,7 +63,7 @@ function Info({ params }) {
                 }
             });
 
-            // console.log(response);
+            // console.log(response.data);
             setUserDetails(response.data);
 
             setLatitude(response.data?.location?.x);
@@ -119,13 +143,15 @@ function Info({ params }) {
                 await navigator.clipboard.writeText(name);
                 toast.success("Copied to clipboard");
             },
-            value: name
+            value: userDetails?.name
         },
         {
             name: "Email address",
             leftIcon: <Mail size={18} />,
             rightIcon: <Upload size={18} />,
-            value: userDetails.email,
+            value: (
+                <span className='w-50 block truncate'>{userDetails.email}</span>
+            ),
             onClick: () => {
                 window.location.href = `mailto:${userDetails.email}`;
             }
@@ -189,12 +215,28 @@ function Info({ params }) {
                             />
                         </span>
                     ) :
-                        name.charAt(0)
+                        userDetails?.name?.charAt(0)
                     }
                 </p>
                 <div className='text-center'>
-                    <p className='text-xl'>{name}</p>
-                    <p className='text-green-600'>&bull; Online</p>
+                    <p className='text-xl'>{userDetails?.name}</p>
+                    <p className={`text-sm ${isOnline === "Online" && 'text-green-600'}`}>
+                        {
+                            isOnline === "Online" ? isOnline
+                                : (
+                                    <span>Last seen: {
+                                        new Date(userDetails?.last_seen).toLocaleString("en-IN", {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: true,
+                                        })
+                                    }</span>
+                                )
+                        }
+                    </p>
                 </div>
                 <div className='flex gap-5'>
                     {contactButtons.map((button, index) => (

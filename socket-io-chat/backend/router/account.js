@@ -10,6 +10,28 @@ router.post('/', async (req, res) => {
     res.json(result.rows);
 });
 
+router.post('/get-users', async (req, res) => {
+
+    let { id } = req.body;
+
+    const hashids = new Hashids(process.env.HASHIDS_SALT, 36);
+    [id] = hashids.decode(id);
+
+    const users = await pool.query("select * from account");
+
+    const chats = await pool.query("select * from chats where (sender_id = $1 or receiver_id = $1) and (deleted is null or deleted <> $1) order by time desc",
+        [id]
+    );
+
+    const result = users.rows.map(user => ({
+        ...user,
+        chats: chats.rows.filter(chat => (Number(chat.sender_id) === id && chat.receiver_id === user.id) ||
+            (chat.sender_id === user.id && Number(chat.receiver_id) === id))
+    }));
+
+    res.json(result);
+});
+
 router.get("/user-info", async (req, res) => {
     let { id } = req.query;
 
